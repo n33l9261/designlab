@@ -1,0 +1,10 @@
+* {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+  font-family: "PT Sans", sans-serif;
+}
+.brand-name {
+  height: 0;
+  width: 10px;
+}
