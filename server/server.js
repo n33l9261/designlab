@@ -70,6 +70,11 @@ instance.orders.create(options, function(err, order) {
   res.json(order);
 });
 })
+app.get("/getsessions2", async(req,res)=> {
+  var id2=JSON.parse(id);
+ var lol= await sessions.find({Organizers : req.query.id2._id});
+  res.json(lol);
+} )
 
 app.post("/success", async(req,res)=> {
   
