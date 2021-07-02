@@ -6,6 +6,7 @@ import http from "http";
 import { v4 as uuidV4 } from "uuid";
 import Razorpay from "razorpay";
 import sessions from "./models/SessionModel.js";
+import livesessions from "./models/livesession.js";
 // import socketIO from "socket.io";
 // import { socket } from "socket.io";
 import { Server } from "socket.io";
@@ -71,10 +72,55 @@ instance.orders.create(options, function(err, order) {
 });
 })
 app.get("/getsessions2", async(req,res)=> {
-  var id2=JSON.parse(id);
- var lol= await sessions.find({Organizers : req.query.id2._id});
+  console.log(req.query.id)
+  var id2=JSON.parse(req.query.id);
+ var lol= await sessions.find({Organizers :id2.email});
+ console.log(lol);
   res.json(lol);
 } )
+app.get("/getsessions3", async(req,res)=> {
+  console.log(req.query.id)
+  var id2=JSON.parse(req.query.id);
+ var lol= await sessions.find({Participants : id2.email});
+ console.log(lol);
+  res.json(lol);
+} )
+app.get("/startsessions", async(req,res)=> {
+  console.log(req.query.id)
+  var sess = await sessions.findOne({_id:req.query.id});
+  sess= JSON.stringify(sess);
+  sess = JSON.parse(sess);
+  sess['session_id']=sess._id;
+  delete sess._id;
+  delete sess._v;
+  console.log(sess);
+  var sessionlive = new livesessions(sess);
+  var check = await livesessions.findOne({session_id:sess.id})
+  var ret;
+  console.log(check)
+  console.log("akhane ashegache")
+  if(!check){
+  await sessionlive.save()
+  
+  }
+  
+  res.send(sess.session_id);
+} )
+app.get("/joinsessions", async(req,res)=> {
+
+  var check = await livesessions.findOne({session_id:req.query.id})
+  var ret;
+  console.log(req.query.id);
+  if(!check){
+  res.send("session has not started")
+  
+  }
+  else{
+  
+  res.send(req.query.id);
+  }
+} )
+
 
 app.post("/success", async(req,res)=> {
   
@@ -82,7 +128,7 @@ app.post("/success", async(req,res)=> {
   console.log(id3._id);
   console.log("session id" + req.query.id2);
   res.send ("payment success");
-  await sessions.updateOne({_id:req.query.id2},{ $push: { Participants: id3._id }})
+  await sessions.updateOne({_id:req.query.id2},{ $push: { Participants: id3.email }})
 })
 
 io.on("connection", (socket) => {

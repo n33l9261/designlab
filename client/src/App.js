@@ -23,6 +23,8 @@ import MentorEditScreen from "./screen/UserEDitScreen.js";
 import VideoSession from "./screen/VideoSessionScreen.js";
 import FindSession from "./screen/FindSessionScreen.js";
 import createsession from "./screen/CreateSession.js";
+import CreatedSession from "./screen/CreatedSessionScreen.js";
+import RegisteredSession from "./screen/RegisteredSessionScreen.js";
 
 function App() {
   const userSigninMentee = useSelector((state) => state.userSigninMentee);
@@ -53,6 +55,8 @@ function App() {
             <Link to="/registersession">Register Session</Link>
             <Link to="/findsession">Find Session</Link>
             <Link to="/createsession">Create Session</Link>
+            <Link to="/createdsessions">My Sessions</Link>
+            <Link to="/registeredsessions">Registered Sessions</Link>
 
             {userInfoMentee ? (
               <div className="dropdown">
@@ -77,9 +81,17 @@ function App() {
               <div className="dropdown">
                 <Link to="#">{userInfoMentor.name}</Link>
                 <ul className="dropdown-content">
-                  <Link to="#signout" onClick={signoutHandlerMentor}>
-                    Sign Out
-                  </Link>
+                  {/* <li>
+                    {" "}
+                    <Link to="/createdsession" onClick={CreatedSessionScreen}>
+                      My Sessions
+                    </Link>
+                  </li> */}
+                  <li>
+                    <Link to="#signout" onClick={signoutHandlerMentor}>
+                      Sign Out
+                    </Link>
+                  </li>
                 </ul>
               </div>
             ) : (
@@ -198,6 +210,17 @@ function App() {
           <MentorRoute path="/createsession" component={createsession} />
           <Route path="/signin-mentor" component={LogInMentorScreen} />
           <Route path="/videosession" component={VideoSession} />
+          <MentorRoute
+            path="/createdsessions"
+            component={CreatedSession}
+            exact
+          />
+           <Route
+            path="/registeredsessions"
+            component={RegisteredSession}
+            exact
+          />
+        
         </main>
         <footer className="row center">All right reserved</footer>
       </div>
